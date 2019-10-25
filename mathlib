@@ -1,0 +1,70 @@
+# library of functions used in math problem shell scripts
+
+# provides a random number between 1 and x
+function rand() {
+	echo `expr $(($RANDOM % $1 + 1))`
+}
+
+# provides a random number between 0 and x
+function randzero() {
+	local x=`expr $1 + 1`
+	echo `expr $(($RANDOM % $x))`
+}
+
+# Parameters:
+# $1 is the name of the variable, such as 'x'
+# $2 is the value of the variable
+# 
+# Requires a variable MAX be defined containing the largest valid input
+function solvealg() {
+	
+	local answer=-1
+	while [ $answer -ne "$2" ]
+	do
+		read -p "Enter the value of $1: " answer
+
+		case $answer in
+			*[!0-9]) echo "Invalid input!" 
+				answer=-1
+				continue ;;
+		esac
+
+		if [ $answer -gt $MAX ] || [ $answer -lt 1 ] ; then
+			printf "Input out of range!\nAll values between 1 and %s\n" \
+				$MAX
+			answer=-1
+		elif [ $answer -ne $2 ] ; then
+			echo "Incorrect, try again!"
+		fi
+	done
+
+	printf "\nGood job, you are correct!\n\n"
+}
+
+# Parameters:
+# $1 is the equation to be solved
+# $2 is the answer
+function solvemath () {
+
+	printf "Solve the following problem\n\n"
+
+	local answer=-1
+	while [ $answer -ne "$2" ]
+	do
+		read -p "$1" answer
+
+		case $answer in
+			*[!0-9]*) printf "Invalid input! Try again!\n\n"
+				answer=-1
+				continue ;;
+		esac
+
+		if [ $answer -ne "$2" ]; then
+			printf "Incorrect, try again!\n\n"
+		fi
+	done
+
+	printf "\nGood job, you are correct!\n\n"
+}
+
+# vim: filetype=sh
